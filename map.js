@@ -149,6 +149,56 @@ $(function() {
 
     map.legend();
 
+    map.addPlugin('warning', function ( layer, data ) {  
+        // hold this in a closure
+        var self = this;
+
+        // a class you'll add to the DOM elements
+        var className = 'warning';
+
+        // Clear any previous symbols.
+        layer.selectAll("*")
+            .remove();
+
+        // make a D3 selection.
+        var warnings = layer
+               .selectAll(className)
+               .data( data, JSON.stringify );
+
+        warnings
+          .enter()
+            .append('svg:image')
+            .attr('class', className)
+            .attr('x', function ( datum ) {
+              return self.latLngToXY(datum.lat, datum.lng)[0] - 12;
+            })
+            .attr('y', function ( datum ) {
+              return self.latLngToXY(datum.lat, datum.lng)[1] - 12;
+            })
+            .attr('width', 24)
+            .attr('height', 24)
+            .attr('xlink:href', function(datum) {
+                switch (datum.warn) {
+                    case "flood":
+                        return "res/flood.png";
+
+                    case "flashflood":
+                        return "res/flashflood.png"
+
+                    case "drought":
+                        return "res/drought.png";
+                }
+            })
+            // .attr('r', 10);
+    });
+
+    map.warning([
+        { lat: 46.03, lng:15.3, warn: "flood" },
+        { lat: 46.55, lng:15.2, warn: "flashflood" },
+        { lat: 45.75, lng:14.30, warn: "drought" },
+
+    ]);
+
     var smallTodayMap = new Datamap({
         element: document.getElementById('small_today_map'),
 
@@ -272,6 +322,12 @@ $(function() {
         if (currentMap == 0) {
             map.updateChoropleth(todayData());
         }
+
+        map.warning([
+            { lat: 46.03, lng:15.3, warn: "flood" },
+            { lat: 46.55, lng:15.2, warn: "flashflood" },
+            { lat: 45.75, lng:14.30, warn: "drought" },
+        ]);
     });
 
     $('#nok_today').click(function() {
@@ -280,6 +336,12 @@ $(function() {
         if (currentMap == 0) {
             map.updateChoropleth(nokTodayData());
         }
+
+        map.warning([
+            { lat: 46.03, lng:15.3, warn: "flashflood" },
+            { lat: 46.55, lng:15.2, warn: "flashflood" },
+            { lat: 45.75, lng:14.30, warn: "flashflood" },
+        ]);
     });
 
     $('#normal_tomorrow').click(function() {
