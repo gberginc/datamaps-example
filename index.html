@@ -125,6 +125,11 @@
 
             geographyConfig: {
                 dataUrl: 'ha_obmocja_vvode.json',
+                popupTemplate: function(geo, data) {
+                    return ['<div class="hoverinfo"><strong>' + geo.properties.name + '</strong>',
+                            '<br/>' + data.fillKey,
+                            '</div>'].join('');
+                },
             },
 
             scope: 'ha_obmocja_vvode',
