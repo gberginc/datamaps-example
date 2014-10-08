@@ -148,15 +148,17 @@
             },
 
             fills: {
-                WARN3: 'red',
-                WARN2: 'orange',
-                WARN1: 'yellow',
                 NORMAL: 'green',
+                WARN1: 'yellow',
+                WARN2: 'orange',
+                WARN3: 'red',
                 defaultFill: 'green'
             },
 
             data: todayData()
         });
+
+        map.legend();
 
         var smallTodayMap = new Datamap({
             element: document.getElementById('small_today_map'),
