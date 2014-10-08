@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="http://d3js.org/topojson.v1.js"></script>
+<!--<script src="datamaps.world.min.js"></script>-->
+<script src="datamaps.all.js"></script>
+<link rel="stylesheet" type="text/css" href="map.css">
+<script>
+    var currentMap = 0;
+    // Tole je samo za demo, ker nimam dejanskih podatkov pri sebi.
+    var katastrofaDanes = false;
+    var katastrofaJutri = false;
+
+    function danes() {
+        var data = {};
+
+        for (var i = 1; i <= 26; i++) {
+            var razred = "NORMALNO";
+
+            if (i < 10) {
+                razred = "NORMALNO";
+            } else if (i < 12) {
+                razred = "RAZLIVANJA";
+            } else if (i < 15) {
+                razred = "POPLAVE";
+            } else {
+                razred = "NORMALNO";
+            }
+
+            data["ha_" + i.toString()] = { fillKey: razred };
+        }
+
+        return data;
+    }
+
+    function jutri() {
+        var data = {};
+
+        for (var i = 1; i <= 26; i++) {
+            var razred = "NORMALNO";
+
+            if (i < 6) {
+                razred = "NORMALNO";
+            } else if (i < 10) {
+                razred = "RAZLIVANJA";
+            } else if (i < 15) {
+                razred = "OBSEZNE_POPLAVE";
+            } else if (i < 20) { 
+                razred = "POPLAVE";
+            } else {
+                razred = "NORMALNO";
+            }
+
+            data["ha_" + i.toString()] = { fillKey: razred };
+        }
+
+        return data;
+    }
+
+    function pojutrisnjem() {
+        var data = {};
+
+        for (var i = 1; i <= 26; i++) {
+            var razred = "NORMALNO";
+
+            if (i < 15) {
+                razred = "NORMALNO";
+            } else if (i < 17) {
+                razred = "RAZLIVANJA";
+            } else {
+                razred = "NORMALNO";
+            }
+
+            data["ha_" + i.toString()] = { fillKey: razred };
+        }
+
+        return data;
+    }
+
+    function katastrofa_danes() {
+        var data = {};
+
+        for (var i = 1; i <= 26; i++) {
+            var razred = "NORMALNO";
+
+            if (i < 15) {
+                razred = "OBSEZNE_POPLAVE";
+            } else if (i < 17) {
+                razred = "POPLAVE";
+            } else {
+                razred = "OBSEZNE_POPLAVE";
+            }
+
+            data["ha_" + i.toString()] = { fillKey: razred };
+        }
+
+        return data;
+    }
+
+    function katastrofa_jutri() {
+        var data = {};
+
+        for (var i = 1; i <= 26; i++) {
+            var razred = "NORMALNO";
+
+            if (i < 12) {
+                razred = "OBSEZNE_POPLAVE";
+            } else if (i < 20) {
+                razred = "POPLAVE";
+            } else {
+                razred = "OBSEZNE_POPLAVE";
+            }
+
+            data["ha_" + i.toString()] = { fillKey: razred };
+        }
+
+        return data;
+    }
+
+
+    $(function() {
+        var map = new Datamap({
+            element: document.getElementById('container'),
+
+            geographyConfig: {
+                dataUrl: 'ha_obmocja_vvode.json',
+            },
+
+            scope: 'ha_obmocja_vvode',
+
+            setProjection: function(element, options) {
+                projection = d3.geo.albers()
+                    .center([1.5320991,46.1661174])
+                    .translate([element.offsetWidth / 2, element.offsetHeight / 2])
+                    .rotate([-13.4, 0])
+                    .scale(14500);
+
+                var path = d3.geo.path()
+                    .projection( projection );
+
+                return {path: path, projection: projection};
+            },
+
+            fills: {
+                OBSEZNE_POPLAVE: 'red',
+                POPLAVE: 'orange',
+                RAZLIVANJA: 'yellow',
+                NORMALNO: 'green',
+                defaultFill: 'green'
+            },
+
+            data: danes()
+        });
+
+        var smallTodayMap = new Datamap({
+            element: document.getElementById('small_today_map'),
+
+            geographyConfig: {
+                dataUrl: 'ha_obmocja_vvode.json',
+                popupOnHover: false, //disable the popup while hovering
+                highlightOnHover: false,
+            },
+
+            scope: 'ha_obmocja_vvode',
+
+            setProjection: function(element, options) {
+                projection = d3.geo.albers()
+                    .center([1.5320991,46.1661174])
+                    .translate([element.offsetWidth / 2, element.offsetHeight / 2])
+                    .rotate([-13.4, 0])
+                    .scale(4500);
+
+                var path = d3.geo.path()
+                    .projection( projection );
+
+                return {path: path, projection: projection};
+            },
+
+            fills: {
+                OBSEZNE_POPLAVE: 'red',
+                POPLAVE: 'orange',
+                RAZLIVANJA: 'yellow',
+                NORMALNO: 'green',
+                defaultFill: 'green'
+            },
+
+            data: danes()
+        });
+
+        var smallTomorrowMap = new Datamap({
+            element: document.getElementById('small_tomorrow_map'),
+
+            geographyConfig: {
+                dataUrl: 'ha_obmocja_vvode.json',
+                popupOnHover: false, //disable the popup while hovering
+                highlightOnHover: false,
+            },
+
+            scope: 'ha_obmocja_vvode',
+
+            setProjection: function(element, options) {
+                projection = d3.geo.albers()
+                    .center([1.5320991,46.1661174])
+                    .translate([element.offsetWidth / 2, element.offsetHeight / 2])
+                    .rotate([-13.4, 0])
+                    .scale(4500);
+
+                var path = d3.geo.path()
+                    .projection( projection );
+
+                return {path: path, projection: projection};
+            },
+
+            fills: {
+                OBSEZNE_POPLAVE: 'red',
+                POPLAVE: 'orange',
+                RAZLIVANJA: 'yellow',
+                NORMALNO: 'green',
+                defaultFill: 'green'
+            },
+
+            data: jutri()
+        });
+
+        var smallAfterTomorrowMap = new Datamap({
+            element: document.getElementById('small_after_tomorrow_map'),
+
+            geographyConfig: {
+                dataUrl: 'ha_obmocja_vvode.json',
+                popupOnHover: false, //disable the popup while hovering
+                highlightOnHover: false,
+            },
+
+            scope: 'ha_obmocja_vvode',
+
+            setProjection: function(element, options) {
+                projection = d3.geo.albers()
+                    .center([1.5320991,46.1661174])
+                    .translate([element.offsetWidth / 2, element.offsetHeight / 2])
+                    .rotate([-13.4, 0])
+                    .scale(4500);
+
+                var path = d3.geo.path()
+                    .projection( projection );
+
+                return {path: path, projection: projection};
+            },
+
+            fills: {
+                OBSEZNE_POPLAVE: 'red',
+                POPLAVE: 'orange',
+                RAZLIVANJA: 'yellow',
+                NORMALNO: 'green',
+                defaultFill: 'green'
+            },
+
+            data: pojutrisnjem()
+        });
+
+        $('#small_today').click(function() {
+            map.updateChoropleth((katastrofaDanes ? katastrofa_danes() : danes()));
+            currentMap = 0;
+        });
+
+        $('#small_tomorrow').click(function() {
+            map.updateChoropleth((katastrofaJutri ? katastrofa_jutri() : jutri()));
+            currentMap = 1;
+        });
+
+        $('#small_after_tomorrow').click(function() {
+            map.updateChoropleth(pojutrisnjem());
+            currentMap = 2;
+        });
+
+        $('#normalno_danes').click(function() {
+            katastrofaDanes = false;
+            smallTodayMap.updateChoropleth(danes());
+            if (currentMap == 0) {
+                map.updateChoropleth(danes());
+            }
+        });
+
+        $('#katastrofa_danes').click(function() {
+            katastrofaDanes = true;
+            smallTodayMap.updateChoropleth(katastrofa_danes());
+            if (currentMap == 0) {
+                map.updateChoropleth(katastrofa_danes());
+            }
+        });
+
+        $('#normalno_jutri').click(function() {
+            katastrofaJutri = false;
+            smallTomorrowMap.updateChoropleth(jutri());
+            if (currentMap == 1) {
+                map.updateChoropleth(jutri());
+            }
+        });
+
+        $('#katastrofa_jutri').click(function() {
+            katastrofaJutri = true;
+            smallTomorrowMap.updateChoropleth(katastrofa_jutri());
+            if (currentMap == 1) {
+                map.updateChoropleth(katastrofa_jutri());
+            }
+        });
+    });
+</script>
+</head>
+<body>
+    <div class="maps">
+        <a id="small_today" href="#"><div id="small_today_map"></div></a>
+        <a id="small_tomorrow" href="#"><div id="small_tomorrow_map"></div></a>
+        <a id="small_after_tomorrow" href="#"><div id="small_after_tomorrow_map"></div></a>
+        <div id="container" style="position: relative; width: 714px; height: 435px;"></div>
+    </div>
+    <div class="controls">
+        <button id="normalno_danes">Normalno danes</button>
+        <button id="katastrofa_danes">Katastrofa danes</button>
+        <button id="normalno_jutri">Normalno jutri</button>
+        <button id="katastrofa_jutri">Katastrofa jutri</button>
+    </div>
+</body>
+</html
