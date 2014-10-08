@@ -135,11 +135,10 @@
             scope: 'ha_obmocja_vvode',
 
             setProjection: function(element, options) {
-                projection = d3.geo.albers()
-                    .center([1.5320991,46.1661174])
+                projection = d3.geo.mercator()
+                    .center([14.9,46.15])
                     .translate([element.offsetWidth / 2, element.offsetHeight / 2])
-                    .rotate([-13.4, 0])
-                    .scale(14500);
+                    .scale(11000);
 
                 var path = d3.geo.path()
                     .projection( projection );
@@ -172,11 +171,10 @@
             scope: 'ha_obmocja_vvode',
 
             setProjection: function(element, options) {
-                projection = d3.geo.albers()
-                    .center([1.5320991,46.1661174])
+                projection = d3.geo.mercator()
+                    .center([14.9,46.15])
                     .translate([element.offsetWidth / 2, element.offsetHeight / 2])
-                    .rotate([-13.4, 0])
-                    .scale(4500);
+                    .scale(3500);
 
                 var path = d3.geo.path()
                     .projection( projection );
@@ -207,11 +205,10 @@
             scope: 'ha_obmocja_vvode',
 
             setProjection: function(element, options) {
-                projection = d3.geo.albers()
-                    .center([1.5320991,46.1661174])
+                projection = d3.geo.mercator()
+                    .center([14.9,46.15])
                     .translate([element.offsetWidth / 2, element.offsetHeight / 2])
-                    .rotate([-13.4, 0])
-                    .scale(4500);
+                    .scale(3500);
 
                 var path = d3.geo.path()
                     .projection( projection );
@@ -242,11 +239,10 @@
             scope: 'ha_obmocja_vvode',
 
             setProjection: function(element, options) {
-                projection = d3.geo.albers()
-                    .center([1.5320991,46.1661174])
+                projection = d3.geo.mercator()
+                    .center([14.9,46.15])
                     .translate([element.offsetWidth / 2, element.offsetHeight / 2])
-                    .rotate([-13.4, 0])
-                    .scale(4500);
+                    .scale(3500);
 
                 var path = d3.geo.path()
                     .projection( projection );
