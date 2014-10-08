@@ -5,116 +5,114 @@
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script src="http://d3js.org/d3.v3.js"></script>
 <script src="http://d3js.org/topojson.v1.js"></script>
-<!--<script src="datamaps.world.min.js"></script>-->
 <script src="datamaps.all.js"></script>
 <link rel="stylesheet" type="text/css" href="map.css">
 <script>
     var currentMap = 0;
-    // Tole je samo za demo, ker nimam dejanskih podatkov pri sebi.
-    var katastrofaDanes = false;
-    var katastrofaJutri = false;
+    var nokToday = false;
+    var nokTomorrow = false;
 
-    function danes() {
+    function todayData() {
         var data = {};
 
         for (var i = 1; i <= 26; i++) {
-            var razred = "NORMALNO";
+            var cls = "NORMAL";
 
             if (i < 10) {
-                razred = "NORMALNO";
+                cls = "NORMAL";
             } else if (i < 12) {
-                razred = "RAZLIVANJA";
+                cls = "WARN1";
             } else if (i < 15) {
-                razred = "POPLAVE";
+                cls = "WARN2";
             } else {
-                razred = "NORMALNO";
+                cls = "NORMAL";
             }
 
-            data["ha_" + i.toString()] = { fillKey: razred };
+            data["ha_" + i.toString()] = { fillKey: cls };
         }
 
         return data;
     }
 
-    function jutri() {
+    function tomorrowData() {
         var data = {};
 
         for (var i = 1; i <= 26; i++) {
-            var razred = "NORMALNO";
+            var cls = "NORMAL";
 
             if (i < 6) {
-                razred = "NORMALNO";
+                cls = "NORMAL";
             } else if (i < 10) {
-                razred = "RAZLIVANJA";
+                cls = "WARN1";
             } else if (i < 15) {
-                razred = "OBSEZNE_POPLAVE";
+                cls = "WARN3";
             } else if (i < 20) { 
-                razred = "POPLAVE";
+                cls = "WARN2";
             } else {
-                razred = "NORMALNO";
+                cls = "NORMAL";
             }
 
-            data["ha_" + i.toString()] = { fillKey: razred };
+            data["ha_" + i.toString()] = { fillKey: cls };
         }
 
         return data;
     }
 
-    function pojutrisnjem() {
+    function afterTomorrowData() {
         var data = {};
 
         for (var i = 1; i <= 26; i++) {
-            var razred = "NORMALNO";
+            var cls = "NORMAL";
 
             if (i < 15) {
-                razred = "NORMALNO";
+                cls = "NORMAL";
             } else if (i < 17) {
-                razred = "RAZLIVANJA";
+                cls = "WARN1";
             } else {
-                razred = "NORMALNO";
+                cls = "NORMAL";
             }
 
-            data["ha_" + i.toString()] = { fillKey: razred };
+            data["ha_" + i.toString()] = { fillKey: cls };
         }
 
         return data;
     }
 
-    function katastrofa_danes() {
+    function nokTodayData() {
         var data = {};
 
         for (var i = 1; i <= 26; i++) {
-            var razred = "NORMALNO";
+            var cls = "NORMAL";
 
             if (i < 15) {
-                razred = "OBSEZNE_POPLAVE";
+                cls = "WARN3";
             } else if (i < 17) {
-                razred = "POPLAVE";
+                cls = "WARN2";
             } else {
-                razred = "OBSEZNE_POPLAVE";
+                cls = "WARN3";
             }
 
-            data["ha_" + i.toString()] = { fillKey: razred };
+            data["ha_" + i.toString()] = { fillKey: cls };
         }
 
         return data;
     }
 
-    function katastrofa_jutri() {
+    function nokTomorrowData() {
         var data = {};
 
         for (var i = 1; i <= 26; i++) {
-            var razred = "NORMALNO";
+            var cls = "NORMAL";
 
             if (i < 12) {
-                razred = "OBSEZNE_POPLAVE";
+                cls = "WARN3";
             } else if (i < 20) {
-                razred = "POPLAVE";
+                cls = "WARN2";
             } else {
-                razred = "OBSEZNE_POPLAVE";
+                cls = "WARN3";
             }
 
-            data["ha_" + i.toString()] = { fillKey: razred };
+            data["ha_" + i.toString()] = { fillKey: cls };
         }
 
         return data;
@@ -145,14 +143,14 @@
             },
 
             fills: {
-                OBSEZNE_POPLAVE: 'red',
-                POPLAVE: 'orange',
-                RAZLIVANJA: 'yellow',
-                NORMALNO: 'green',
+                WARN3: 'red',
+                WARN2: 'orange',
+                WARN1: 'yellow',
+                NORMAL: 'green',
                 defaultFill: 'green'
             },
 
-            data: danes()
+            data: todayData()
         });
 
         var smallTodayMap = new Datamap({
@@ -180,14 +178,14 @@
             },
 
             fills: {
-                OBSEZNE_POPLAVE: 'red',
-                POPLAVE: 'orange',
-                RAZLIVANJA: 'yellow',
-                NORMALNO: 'green',
+                WARN3: 'red',
+                WARN2: 'orange',
+                WARN1: 'yellow',
+                NORMAL: 'green',
                 defaultFill: 'green'
             },
 
-            data: danes()
+            data: todayData()
         });
 
         var smallTomorrowMap = new Datamap({
@@ -215,14 +213,14 @@
             },
 
             fills: {
-                OBSEZNE_POPLAVE: 'red',
-                POPLAVE: 'orange',
-                RAZLIVANJA: 'yellow',
-                NORMALNO: 'green',
+                WARN3: 'red',
+                WARN2: 'orange',
+                WARN1: 'yellow',
+                NORMAL: 'green',
                 defaultFill: 'green'
             },
 
-            data: jutri()
+            data: tomorrowData()
         });
 
         var smallAfterTomorrowMap = new Datamap({
@@ -250,60 +248,60 @@
             },
 
             fills: {
-                OBSEZNE_POPLAVE: 'red',
-                POPLAVE: 'orange',
-                RAZLIVANJA: 'yellow',
-                NORMALNO: 'green',
+                WARN3: 'red',
+                WARN2: 'orange',
+                WARN1: 'yellow',
+                NORMAL: 'green',
                 defaultFill: 'green'
             },
 
-            data: pojutrisnjem()
+            data: afterTomorrowData()
         });
 
         $('#small_today').click(function() {
-            map.updateChoropleth((katastrofaDanes ? katastrofa_danes() : danes()));
+            map.updateChoropleth((nokToday ? nokTodayData() : todayData()));
             currentMap = 0;
         });
 
         $('#small_tomorrow').click(function() {
-            map.updateChoropleth((katastrofaJutri ? katastrofa_jutri() : jutri()));
+            map.updateChoropleth((nokTomorrow ? nokTomorrowData() : tomorrowData()));
             currentMap = 1;
         });
 
         $('#small_after_tomorrow').click(function() {
-            map.updateChoropleth(pojutrisnjem());
+            map.updateChoropleth(afterTomorrowData());
             currentMap = 2;
         });
 
-        $('#normalno_danes').click(function() {
-            katastrofaDanes = false;
-            smallTodayMap.updateChoropleth(danes());
+        $('#normalno_today').click(function() {
+            nokToday = false;
+            smallTodayMap.updateChoropleth(todayData());
             if (currentMap == 0) {
-                map.updateChoropleth(danes());
+                map.updateChoropleth(todayData());
             }
         });
 
-        $('#katastrofa_danes').click(function() {
-            katastrofaDanes = true;
-            smallTodayMap.updateChoropleth(katastrofa_danes());
+        $('#nok_today').click(function() {
+            nokToday = true;
+            smallTodayMap.updateChoropleth(nokTodayData());
             if (currentMap == 0) {
-                map.updateChoropleth(katastrofa_danes());
+                map.updateChoropleth(nokTodayData());
             }
         });
 
-        $('#normalno_jutri').click(function() {
-            katastrofaJutri = false;
-            smallTomorrowMap.updateChoropleth(jutri());
+        $('#normalno_tomorrow').click(function() {
+            nokTomorrow = false;
+            smallTomorrowMap.updateChoropleth(tomorrowData());
             if (currentMap == 1) {
-                map.updateChoropleth(jutri());
+                map.updateChoropleth(tomorrowData());
             }
         });
 
-        $('#katastrofa_jutri').click(function() {
-            katastrofaJutri = true;
-            smallTomorrowMap.updateChoropleth(katastrofa_jutri());
+        $('#nok_tomorrow').click(function() {
+            nokTomorrow = true;
+            smallTomorrowMap.updateChoropleth(nokTomorrowData());
             if (currentMap == 1) {
-                map.updateChoropleth(katastrofa_jutri());
+                map.updateChoropleth(nokTomorrowData());
             }
         });
     });
@@ -317,10 +315,10 @@
         <div id="container" style="position: relative; width: 714px; height: 435px;"></div>
     </div>
     <div class="controls">
-        <button id="normalno_danes">Normalno danes</button>
-        <button id="katastrofa_danes">Katastrofa danes</button>
-        <button id="normalno_jutri">Normalno jutri</button>
-        <button id="katastrofa_jutri">Katastrofa jutri</button>
+        <button id="normalno_today">OK today</button>
+        <button id="nok_today">NOK today</button>
+        <button id="normalno_tomorrow">OK tomorrow</button>
+        <button id="nok_tomorrow">NOK tomorrow</button>
     </div>
 </body>
 </html
