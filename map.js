@@ -341,6 +341,7 @@ $(function() {
             { lat: 46.03, lng:15.3, warn: "flashflood" },
             { lat: 46.55, lng:15.2, warn: "flashflood" },
             { lat: 45.75, lng:14.30, warn: "flashflood" },
+            { lat: 46.369746548087065, lng: 15.609914255874894, warn: 'flood' },
         ]);
     });
 
