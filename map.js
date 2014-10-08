@@ -266,7 +266,7 @@ $(function() {
         currentMap = 2;
     });
 
-    $('#normalno_today').click(function() {
+    $('#normal_today').click(function() {
         nokToday = false;
         smallTodayMap.updateChoropleth(todayData());
         if (currentMap == 0) {
@@ -282,7 +282,7 @@ $(function() {
         }
     });
 
-    $('#normalno_tomorrow').click(function() {
+    $('#normal_tomorrow').click(function() {
         nokTomorrow = false;
         smallTomorrowMap.updateChoropleth(tomorrowData());
         if (currentMap == 1) {
