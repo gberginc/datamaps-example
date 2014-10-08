@@ -170,13 +170,13 @@ $(function() {
             .append('svg:image')
             .attr('class', className)
             .attr('x', function ( datum ) {
-              return self.latLngToXY(datum.lat, datum.lng)[0] - 12;
+              return self.latLngToXY(datum.lat, datum.lng)[0] - 8;
             })
             .attr('y', function ( datum ) {
-              return self.latLngToXY(datum.lat, datum.lng)[1] - 12;
+              return self.latLngToXY(datum.lat, datum.lng)[1] - 8;
             })
-            .attr('width', 24)
-            .attr('height', 24)
+            .attr('width', 16)
+            .attr('height', 16)
             .attr('xlink:href', function(datum) {
                 switch (datum.warn) {
                     case "flood":
