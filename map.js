@@ -2,115 +2,66 @@ var currentMap = 0;
 var nokToday = false;
 var nokTomorrow = false;
 
-function todayData() {
-    var data = {};
+var warnClasses = ["NORMAL", "WARN1", "WARN2", "WARN3"];
 
-    for (var i = 1; i <= 26; i++) {
-        var cls = "NORMAL";
+var TODAY_MAP = 0;
+var TOMORROW_MAP = 1;
+var AFTERTOMORROW_MAP = 2;
 
-        if (i < 10) {
-            cls = "NORMAL";
-        } else if (i < 12) {
-            cls = "WARN1";
-        } else if (i < 15) {
-            cls = "WARN2";
-        } else {
-            cls = "NORMAL";
-        }
+var map;
+var maps;
 
-        data["ha_" + i.toString()] = { fillKey: cls };
+function getChoropleth(haData) {
+    data = {};
+
+    for (var haId in haData) {
+        var flood = haData[haId].flood;
+        var flashflood = haData[haId].flashflood;
+        var drought = haData[haId].drought;
+
+        var maxWarn = Math.max(flood, flashflood, drought);
+
+        data[haId] = { fillKey: warnClasses[maxWarn] };
     }
 
     return data;
 }
 
-function tomorrowData() {
-    var data = {};
+function updateMap(mapId, data) {
+    maps[mapId].updateChoropleth(getChoropleth(data));
 
-    for (var i = 1; i <= 26; i++) {
-        var cls = "NORMAL";
-
-        if (i < 6) {
-            cls = "NORMAL";
-        } else if (i < 10) {
-            cls = "WARN1";
-        } else if (i < 15) {
-            cls = "WARN3";
-        } else if (i < 20) { 
-            cls = "WARN2";
-        } else {
-            cls = "NORMAL";
-        }
-
-        data["ha_" + i.toString()] = { fillKey: cls };
+    // If we are updating the currently active map, update the large map as well.
+    if (currentMap == mapId) {
+        map.updateChoropleth(getChoropleth(data));
+        map.warning(getWarnings(data));
     }
-
-    return data;
 }
 
-function afterTomorrowData() {
-    var data = {};
+function getWarnings(haData) {
+    var warnings = [];
 
-    for (var i = 1; i <= 26; i++) {
-        var cls = "NORMAL";
+    for (var haId in haData) {
+        var flood = haData[haId].flood;
+        var flashflood = haData[haId].flashflood;
+        var drought = haData[haId].drought;
 
-        if (i < 15) {
-            cls = "NORMAL";
-        } else if (i < 17) {
-            cls = "WARN1";
-        } else {
-            cls = "NORMAL";
+        var centroid = centroids[haId];
+
+        if (flood > 0) {
+            warnings.push({lat: centroid.lat, lng: centroid.lng, warn: 'flood' });
+        } else if (flashflood > 0) {
+            warnings.push({lat: centroid.lat, lng: centroid.lng, warn: 'flashflood' });
+        } else if (drought > 0) {
+            warnings.push({lat: centroid.lat, lng: centroid.lng, warn: 'drought' });
         }
-
-        data["ha_" + i.toString()] = { fillKey: cls };
+            
     }
 
-    return data;
+    return warnings;
 }
-
-function nokTodayData() {
-    var data = {};
-
-    for (var i = 1; i <= 26; i++) {
-        var cls = "NORMAL";
-
-        if (i < 15) {
-            cls = "WARN3";
-        } else if (i < 17) {
-            cls = "WARN2";
-        } else {
-            cls = "WARN3";
-        }
-
-        data["ha_" + i.toString()] = { fillKey: cls };
-    }
-
-    return data;
-}
-
-function nokTomorrowData() {
-    var data = {};
-
-    for (var i = 1; i <= 26; i++) {
-        var cls = "NORMAL";
-
-        if (i < 12) {
-            cls = "WARN3";
-        } else if (i < 20) {
-            cls = "WARN2";
-        } else {
-            cls = "WARN3";
-        }
-
-        data["ha_" + i.toString()] = { fillKey: cls };
-    }
-
-    return data;
-}
-
 
 $(function() {
-    var map = new Datamap({
+    map = new Datamap({
         element: document.getElementById('container'),
 
         geographyConfig: {
@@ -144,7 +95,7 @@ $(function() {
             defaultFill: 'green'
         },
 
-        data: todayData()
+        data: getChoropleth(ha_today_ok)
     });
 
     map.legend();
@@ -192,12 +143,13 @@ $(function() {
             // .attr('r', 10);
     });
 
-    map.warning([
-        { lat: 46.03, lng:15.3, warn: "flood" },
-        { lat: 46.55, lng:15.2, warn: "flashflood" },
-        { lat: 45.75, lng:14.30, warn: "drought" },
+    // map.warning([
+    //     { lat: 46.03, lng:15.3, warn: "flood" },
+    //     { lat: 46.55, lng:15.2, warn: "flashflood" },
+    //     { lat: 45.75, lng:14.30, warn: "drought" },
+    // ]);
 
-    ]);
+    map.warning(getWarnings(ha_today_ok));
 
     var smallTodayMap = new Datamap({
         element: document.getElementById('small_today_map'),
@@ -230,7 +182,7 @@ $(function() {
             defaultFill: 'green'
         },
 
-        data: todayData()
+        data: getChoropleth(ha_today_ok)
     });
 
     var smallTomorrowMap = new Datamap({
@@ -264,7 +216,7 @@ $(function() {
             defaultFill: 'green'
         },
 
-        data: tomorrowData()
+        data: getChoropleth(ha_tomorrow_ok)
     });
 
     var smallAfterTomorrowMap = new Datamap({
@@ -298,67 +250,54 @@ $(function() {
             defaultFill: 'green'
         },
 
-        data: afterTomorrowData()
+        data: getChoropleth(ha_aftertomorrow_ok)
     });
 
+    // Store maps into an array for easier demoing.
+    maps = [ smallTodayMap, smallTomorrowMap, smallAfterTomorrowMap ];
+
     $('#small_today').click(function() {
-        map.updateChoropleth((nokToday ? nokTodayData() : todayData()));
         currentMap = 0;
+
+        map.updateChoropleth((nokToday ? getChoropleth(ha_today_nok) : getChoropleth(ha_today_ok)));
+        map.warning(getWarnings(nokToday ? ha_today_nok : ha_today_ok));
     });
 
     $('#small_tomorrow').click(function() {
-        map.updateChoropleth((nokTomorrow ? nokTomorrowData() : tomorrowData()));
         currentMap = 1;
+
+        map.updateChoropleth((nokTomorrow ? getChoropleth(ha_tomorrow_nok) : getChoropleth(ha_tomorrow_ok)));
+        map.warning(getWarnings(nokTomorrow ? ha_tomorrow_nok : ha_tomorrow_ok));
     });
 
     $('#small_after_tomorrow').click(function() {
-        map.updateChoropleth(afterTomorrowData());
         currentMap = 2;
+
+        map.updateChoropleth(getChoropleth(ha_aftertomorrow_ok));
+        map.warning(getWarnings(ha_aftertomorrow_ok));
     });
 
     $('#normal_today').click(function() {
-        nokToday = false;
-        smallTodayMap.updateChoropleth(todayData());
-        if (currentMap == 0) {
-            map.updateChoropleth(todayData());
-        }
+        updateMap(TODAY_MAP, ha_today_ok);
 
-        map.warning([
-            { lat: 46.03, lng:15.3, warn: "flood" },
-            { lat: 46.55, lng:15.2, warn: "flashflood" },
-            { lat: 45.75, lng:14.30, warn: "drought" },
-        ]);
+        nokToday = false;
+
     });
 
     $('#nok_today').click(function() {
-        nokToday = true;
-        smallTodayMap.updateChoropleth(nokTodayData());
-        if (currentMap == 0) {
-            map.updateChoropleth(nokTodayData());
-        }
+        updateMap(TODAY_MAP, ha_today_nok);
 
-        map.warning([
-            { lat: 46.03, lng:15.3, warn: "flashflood" },
-            { lat: 46.55, lng:15.2, warn: "flashflood" },
-            { lat: 45.75, lng:14.30, warn: "flashflood" },
-            { lat: 46.369746548087065, lng: 15.609914255874894, warn: 'flood' },
-        ]);
+        nokToday = true;
     });
 
     $('#normal_tomorrow').click(function() {
+        updateMap(TOMORROW_MAP, ha_tomorrow_ok);
         nokTomorrow = false;
-        smallTomorrowMap.updateChoropleth(tomorrowData());
-        if (currentMap == 1) {
-            map.updateChoropleth(tomorrowData());
-        }
     });
 
     $('#nok_tomorrow').click(function() {
+        updateMap(TOMORROW_MAP, ha_tomorrow_nok);
         nokTomorrow = true;
-        smallTomorrowMap.updateChoropleth(nokTomorrowData());
-        if (currentMap == 1) {
-            map.updateChoropleth(nokTomorrowData());
-        }
     });
 });
 
