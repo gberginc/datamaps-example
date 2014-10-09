@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <html>
-<head>
-<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-<script src="http://d3js.org/d3.v3.js"></script>
-<script src="http://d3js.org/topojson.v1.js"></script>
-<script src="datamaps.all.js"></script>
-<script src="map.js"></script>
-<link rel="stylesheet" type="text/css" href="map.css">
-</head>
-<body>
-    <div class="maps">
-        <a id="small_today" href="#"><div id="small_today_map"></div></a>
-        <a id="small_tomorrow" href="#"><div id="small_tomorrow_map"></div></a>
-        <a id="small_after_tomorrow" href="#"><div id="small_after_tomorrow_map"></div></a>
-        <div id="container" style="position: relative; width: 714px; height: 435px;"></div>
-    </div>
-    <div class="controls">
-        <button id="normal_today">OK today</button>
-        <button id="nok_today">NOK today</button>
-        <button id="normal_tomorrow">OK tomorrow</button>
-        <button id="nok_tomorrow">NOK tomorrow</button>
-    </div>
-</body>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script src="http://d3js.org/d3.v3.js"></script>
+        <script src="http://d3js.org/topojson.v1.js"></script>
+        <script src="datamaps.all.js"></script>
+        <script src="data/ha_data.js"></script>
+        <script src="map.js"></script>
+        <link rel="stylesheet" type="text/css" href="map.css">
+    </head>
+    <body>
+        <div class="maps">
+            <a id="small_today" href="#"><div id="small_today_map"></div></a>
+            <a id="small_tomorrow" href="#"><div id="small_tomorrow_map"></div></a>
+            <a id="small_after_tomorrow" href="#"><div id="small_after_tomorrow_map"></div></a>
+            <div id="container" style="position: relative; width: 714px; height: 435px;"></div>
+        </div>
+        <div class="controls">
+            <button id="normal_today">OK today</button>
+            <button id="nok_today">NOK today</button>
+            <button id="normal_tomorrow">OK tomorrow</button>
+            <button id="nok_tomorrow">NOK tomorrow</button>
+        </div>
+    </body>
 </html
