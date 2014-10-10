@@ -7,6 +7,10 @@
     float: left;
 }
 
+.filters {
+    margin-bottom: 8px;
+}
+
 #small_today_map {
     float: left;
     width: 230px;

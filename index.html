@@ -16,6 +16,14 @@
     </head>
     <body>
         <div class="maps">
+            <div class="filters">
+                <ul class="nav nav-pills">
+                    <li class="active"><a id="all_warnings" class="warn_type" data-warn="0" data-toggle="pill" href="#">All</a></li>
+                    <li><a id="flood_warnings" class="warn_type" data-warn="1" data-toggle="pill" href="#">Flood</a></li>
+                    <li><a id="flashflood_warnings" class="warn_type" data-warn="2" data-toggle="pill" href="#">Flashflood</a></li>
+                    <li><a id="drought_warnings" class="warn_type" data-warn="3" data-toggle="pill" href="#">Drought</a></li>
+                </ul>
+            </div>
             <a id="small_today" href="#"><div id="small_today_map"></div></a>
             <a id="small_tomorrow" href="#"><div id="small_tomorrow_map"></div></a>
             <a id="small_after_tomorrow" href="#"><div id="small_after_tomorrow_map"></div></a>

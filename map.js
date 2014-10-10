@@ -1,4 +1,5 @@
 var currentMap = 0;
+var currentWarnings = 0;
 var nokToday = false;
 var nokTomorrow = false;
 
@@ -19,7 +20,26 @@ function getChoropleth(haData) {
         var flashflood = haData[haId].flashflood;
         var drought = haData[haId].drought;
 
-        var maxWarn = Math.max(flood, flashflood, drought);
+        var maxWarn = 0;
+
+        switch (currentWarnings) {
+            case 0:
+                maxWarn = Math.max(flood, flashflood, drought);
+                break;
+
+            case 1:
+                maxWarn = flood;
+                break;
+
+            case 2:
+                maxWarn = flashflood;
+                break;
+
+            case 3:
+                maxWarn = drought;
+                break;
+        }
+
 
         data[haId] = { fillKey: warnClasses[maxWarn] };
     }
@@ -47,17 +67,32 @@ function getWarnings(haData) {
 
         var centroid = centroids[haId];
 
-        if (flood > 0) {
-            warnings.push({lat: centroid.lat, lng: centroid.lng, warn: 'flood' });
-        } else if (flashflood > 0) {
-            warnings.push({lat: centroid.lat, lng: centroid.lng, warn: 'flashflood' });
-        } else if (drought > 0) {
-            warnings.push({lat: centroid.lat, lng: centroid.lng, warn: 'drought' });
+        if ((currentWarnings == 0) || (currentWarnings == 1)) {
+            if (flood > 0) {
+                warnings.push({lat: centroid.lat, lng: centroid.lng, warn: 'flood' });
+            }
         }
-            
+
+        if ((currentWarnings == 0) || (currentWarnings == 2)) {
+            if (flashflood > 0) {
+                warnings.push({lat: centroid.lat, lng: centroid.lng, warn: 'flashflood' });
+            }
+        }
+
+        if ((currentWarnings == 0) || (currentWarnings == 3)) {
+            if (drought > 0) {
+                warnings.push({lat: centroid.lat, lng: centroid.lng, warn: 'drought' });
+            }
+        }
     }
 
     return warnings;
+}
+
+function updateMaps() {
+    updateMap(TODAY_MAP, (nokToday ? ha_today_nok : ha_today_ok));
+    updateMap(TOMORROW_MAP, (nokTomorrow ? ha_tomorrow_nok : ha_tomorrow_ok));
+    updateMap(AFTERTOMORROW_MAP, ha_aftertomorrow_ok);
 }
 
 $(function() {
@@ -255,6 +290,12 @@ $(function() {
 
     // Store maps into an array for easier demoing.
     maps = [ smallTodayMap, smallTomorrowMap, smallAfterTomorrowMap ];
+
+    $('.warn_type').click(function() {
+        currentWarnings = $(this).data("warn");
+
+        updateMaps();
+    });
 
     $('#small_today').click(function() {
         currentMap = 0;
