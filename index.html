@@ -22,10 +22,14 @@
             <div id="container" style="position: relative; width: 714px; height: 435px;"></div>
         </div>
         <div class="controls">
-            <button id="normal_today">OK today</button>
-            <button id="nok_today">NOK today</button>
-            <button id="normal_tomorrow">OK tomorrow</button>
-            <button id="nok_tomorrow">NOK tomorrow</button>
+            <ul class="nav nav-pills">
+                <li class="active"><a id="normal_today" class="warn_type" data-warn="0" data-toggle="pill" href="#">Today OK</a></li>
+                <li><a id="nok_today" class="warn_type" data-warn="1" data-toggle="pill" href="#">Today NOK</a></li>
+            </ul>
+            <ul class="nav nav-pills">
+                <li class="active"><a id="normal_tomorrow" class="warn_type" data-warn="0" data-toggle="pill" href="#">Tomorrow OK</a></li>
+                <li><a id="nok_tomorrow" class="warn_type" data-warn="1" data-toggle="pill" href="#">Tomorrow NOK</a></li>
+            </ul>
         </div>
         <script src="js/bootstrap.min.js"></script>
     </body>
