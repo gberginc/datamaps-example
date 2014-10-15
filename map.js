@@ -100,7 +100,7 @@ $(function() {
         element: document.getElementById('container'),
 
         geographyConfig: {
-            dataUrl: 'ha_obmocja_vvode.json',
+            dataUrl: 'data/ha_simplified-0_001.topo.json',
             popupTemplate: function(geo, data) {
                 return ['<div class="hoverinfo"><strong>' + geo.properties.name + '</strong>',
                         '<br/>' + data.fillKey,
@@ -108,7 +108,7 @@ $(function() {
             },
         },
 
-        scope: 'ha_obmocja_vvode',
+        scope: 'ha_simplified-0_001',
 
         setProjection: function(element, options) {
             projection = d3.geo.mercator()
@@ -190,12 +190,12 @@ $(function() {
         element: document.getElementById('small_today_map'),
 
         geographyConfig: {
-            dataUrl: 'ha_obmocja_vvode.json',
+            dataUrl: 'data/ha_simplified-0_001.topo.json',
             popupOnHover: false, //disable the popup while hovering
             highlightOnHover: false,
         },
 
-        scope: 'ha_obmocja_vvode',
+        scope: 'ha_simplified-0_001',
 
         setProjection: function(element, options) {
             projection = d3.geo.mercator()
@@ -224,12 +224,12 @@ $(function() {
         element: document.getElementById('small_tomorrow_map'),
 
         geographyConfig: {
-            dataUrl: 'ha_obmocja_vvode.json',
+            dataUrl: 'data/ha_simplified-0_001.topo.json',
             popupOnHover: false, //disable the popup while hovering
             highlightOnHover: false,
         },
 
-        scope: 'ha_obmocja_vvode',
+        scope: 'ha_simplified-0_001',
 
         setProjection: function(element, options) {
             projection = d3.geo.mercator()
@@ -258,12 +258,12 @@ $(function() {
         element: document.getElementById('small_after_tomorrow_map'),
 
         geographyConfig: {
-            dataUrl: 'ha_obmocja_vvode.json',
+            dataUrl: 'data/ha_simplified-0_001.topo.json',
             popupOnHover: false, //disable the popup while hovering
             highlightOnHover: false,
         },
 
-        scope: 'ha_obmocja_vvode',
+        scope: 'ha_simplified-0_001',
 
         setProjection: function(element, options) {
             projection = d3.geo.mercator()
